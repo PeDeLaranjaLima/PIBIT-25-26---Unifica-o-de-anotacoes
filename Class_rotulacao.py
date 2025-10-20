@@ -326,6 +326,7 @@ coco = conv.YOLOtoCOCOConverter('imagens/', 'labels/', ['car'], 'saida.json')
 
 """
 conv = convert()
-coco = conv.YOLOtoCOCOConverter(r"C:\Users\g4lim\Downloads\CPLID_val\val\images", r"C:\Users\g4lim\Downloads\CPLID_val\val\labels",
+coco = conv.YOLOtoCOCOConverter(r"C:\CPLID_val\val\images", r"C:\CPLID_val\val\labels",
                                  ['013'], 'saida.json')
+
 coco.convert()
