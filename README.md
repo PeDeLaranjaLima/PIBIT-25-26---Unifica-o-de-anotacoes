@@ -45,5 +45,3 @@ coco = conv.YOLOtoCOCOConverter('imagens/', 'labels/', ['car'], 'saida.json')
 
 coco.convert()
 ```
-
-coco.convert()
