@@ -5,7 +5,7 @@ Código feito por Gabriel Lima Dantas, combase em um código forncido pelo coleg
 Conversor de:
 
 * VOC para YOLO:
- - Modo de uso:
+  - Modo de uso:
   ```
        yolo_labels = converter.convert_xml("/arquivo.xml") // caminho
    
@@ -15,7 +15,7 @@ Conversor de:
   ```
   
 * COCO para YOLO:
-- Modo de uso:
+  - Modo de uso:
 ```
        converter = COCOtoYOLOConverter(
               json_path="caminho/para/instances_train.json",
@@ -24,7 +24,7 @@ Conversor de:
           converter.convert()
 ```
 * YOLO para COCO:
- - Modo de uso:
+  - Modo de uso:
   ```
       converter = YOLOtoCOCOConverter(
            images_dir="caminho/para/imagens",
