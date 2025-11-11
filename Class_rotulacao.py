@@ -5,7 +5,7 @@ from PIL import Image
 
 class convert:
 
-    def __init__(self): # Permitir instância que expõe as classes internas
+    def __init__(self) -> None:# Permitir instância que expõe as classes internas
         self.VOCtoYOLOConverter = self.VOCtoYOLOConverter
         self.COCOtoYOLOConverter = self.COCOtoYOLOConverter
         self.YOLOtoCOCOConverter = self.YOLOtoCOCOConverter
@@ -26,7 +26,7 @@ class convert:
             self.class_map = class_map
 
         @staticmethod
-        def convert_box(size, box):
+        def convert_box(size, box) -> int:
             """
             Converte uma bounding box PASCAL VOC para o formato YOLO.
 
@@ -37,19 +37,19 @@ class convert:
             Returns:
                 tuple: (x_centro, y_centro, largura, altura) em formato YOLO.
             """
-            dw = 1.0 / size[0]
-            dh = 1.0 / size[1]
-            x = (box[0] + box[1]) / 2.0
-            y = (box[2] + box[3]) / 2.0
-            w = box[1] - box[0]
-            h = box[3] - box[2]
-            x = x * dw
-            w = w * dw
-            y = y * dh
-            h = h * dh
-            return (x, y, w, h)
+            dw: float = 1.0 / size[0]
+            dh: float = 1.0 / size[1]
+            x: float = (box[0] + box[1]) / 2.0
+            y: float = (box[2] + box[3]) / 2.0
+            w: float = box[1] - box[0]
+            h: float = box[3] - box[2]
+            x: float = x * dw
+            w: float = w * dw
+            y: float = y * dh
+            h: float = h * dh
+            return (x, y, w, h) 
 
-        def convert_xml(self, xml_path):
+        def convert_xml(self, xml_path: str) -> list:
             """
             Lê um arquivo .xml do PASCAL VOC e retorna o conteúdo convertido em formato YOLO.
 
@@ -59,27 +59,27 @@ class convert:
             Returns:
                 list[str]: Linhas em formato YOLO (ex: ["0 0.5 0.5 0.3 0.4"])
             """
-            tree = ET.parse(xml_path)
-            root = tree.getroot()
-            size = root.find('size')
-            w = int(size.find('width').text)
-            h = int(size.find('height').text)
+            tree: str = ET.parse(xml_path)
+            root: str = tree.getroot()
+            size: int = root.find('size')
+            w: int = int(size.find('width').text)
+            h: int = int(size.find('height').text)
 
             yolo_lines = []
             for obj in root.iter('object'):
-                cls = obj.find('name').text
+                cls: str = obj.find('name').text
                 if cls not in self.class_map:
                     continue
                 cls_id = self.class_map[cls]
                 xmlbox = obj.find('bndbox')
-                b = (
+                b: float = (
                     float(xmlbox.find('xmin').text),
                     float(xmlbox.find('xmax').text),
                     float(xmlbox.find('ymin').text),
                     float(xmlbox.find('ymax').text)
                 )
-                bb = self.convert_box((w, h), b)
-                line = f"{cls_id} {' '.join(map(str, bb))}"
+                bb: int = self.convert_box((w, h), b)
+                line: str = f"{cls_id} {' '.join(map(str, bb))}"
                 yolo_lines.append(line)
             return yolo_lines
 
@@ -101,7 +101,7 @@ class convert:
         para o formato YOLO (.txt).
         """
 
-        def __init__(self, json_path, output_dir):
+        def __init__(self, json_path: str, output_dir: str):
             """
             Inicializa o conversor.
 
@@ -115,16 +115,16 @@ class convert:
 
             # Carregar JSON
             with open(self.json_path, 'r') as f:
-                self.coco_data = json.load(f)
+                self.coco_data: str = json.load(f)
 
             # Criar dicionários auxiliares
-            self.images = {img['id']: img for img in self.coco_data['images']}
-            self.categories = {cat['id']: cat['name'] for cat in self.coco_data['categories']}
+            self.images: str = {img['id']: img for img in self.coco_data['images']}
+            self.categories: str = {cat['id']: cat['name'] for cat in self.coco_data['categories']}
 
             # Mapeia classes para IDs sequenciais (0, 1, 2, ...)
-            self.class_map = {name: i for i, name in enumerate(sorted(self.categories.values()))}
+            self.class_map: int = {name: i for i, name in enumerate(sorted(self.categories.values()))}
 
-        def convert_bbox(self, bbox, img_width, img_height):
+        def convert_bbox(self, bbox: list, img_width: int, img_height: int) -> int:
             """
             Converte bounding box do formato COCO para YOLO.
 
@@ -148,26 +148,26 @@ class convert:
             Converte todas as anotações COCO para YOLO e salva um .txt por imagem.
             """
             # Agrupar anotações por imagem
-            annotations_by_image = {}
+            annotations_by_image: dict = {}
             for ann in self.coco_data['annotations']:
-                img_id = ann['image_id']
-                annotations_by_image.setdefault(img_id, []).append(ann)
+                img_id: str = ann['image_id']
+                annotations_by_image.setdefault(img_id, []).append(ann): dict # type: ignore
 
             # Converter imagem por imagem
             for img_id, anns in annotations_by_image.items():
-                image_info = self.images[img_id]
-                img_w, img_h = image_info['width'], image_info['height']
+                image_info: str = self.images[img_id]
+                img_w, img_h: str = image_info['width'], image_info['height'] # type: ignore
                 img_name = os.path.splitext(image_info['file_name'])[0]
 
                 yolo_lines = []
                 for ann in anns:
-                    cat_name = self.categories[ann['category_id']]
+                    cat_name: str = self.categories[ann['category_id']]
                     cls_id = self.class_map[cat_name]
-                    bb = self.convert_bbox(ann['bbox'], img_w, img_h)
-                    yolo_lines.append(f"{cls_id} {' '.join(map(str, bb))}")
+                    bb: int = self.convert_bbox(ann['bbox'], img_w, img_h)
+                    yolo_lines.append(f"{cls_id} {' '.join(map(str, bb))}"): list # type: ignore
 
                 # Salvar arquivo YOLO
-                txt_path = os.path.join(self.output_dir, img_name + ".txt")
+                txt_path: str = os.path.join(self.output_dir, img_name + ".txt")
                 with open(txt_path, "w") as f:
                     f.write("\n".join(yolo_lines))
 
@@ -187,7 +187,7 @@ class convert:
         para o formato COCO (.json).
         """
 
-        def __init__(self, images_dir, labels_dir, class_names, output_json):
+        def __init__(self, images_dir: str, labels_dir: str, class_names: str, output_json: str):
             """
             Inicializa o conversor.
 
@@ -197,12 +197,12 @@ class convert:
                 class_names (list): Lista com os nomes das classes (na ordem dos IDs YOLO)
                 output_json (str): Caminho do arquivo de saída COCO (.json)
             """
-            self.images_dir = images_dir
-            self.labels_dir = labels_dir
-            self.class_names = class_names
-            self.output_json = output_json
+            self.images_dir: str = images_dir
+            self.labels_dir: str = labels_dir
+            self.class_names: str = class_names
+            self.output_json: str = output_json
 
-        def convert_bbox(self, bbox, img_width, img_height):
+        def convert_bbox(self, bbox: list, img_width: int, img_height: int) -> float:
             """
             Converte uma bounding box YOLO para COCO.
 
@@ -215,10 +215,10 @@ class convert:
                 list: [x_min, y_min, width, height] (em pixels absolutos)
             """
             x_center, y_center, w, h = bbox
-            x_min = (x_center - w / 2) * img_width
-            y_min = (y_center - h / 2) * img_height
-            width = w * img_width
-            height = h * img_height
+            x_min: float = (x_center - w / 2) * img_width
+            y_min: float = (y_center - h / 2) * img_height
+            width: float = w * img_width
+            height: float = h * img_height
             return [x_min, y_min, width, height]
 
         def convert(self):
@@ -228,11 +228,13 @@ class convert:
             images = []
             annotations = []
             categories = []
-            ann_id = 1
-            img_id = 1
+            ann_id: int = 1
+            img_id: int = 1
 
             # Criar categorias COCO
-            for i, name in enumerate(self.class_names):
+            for i, name in enumerate(self.class_names):   # type: ignore # type: tuple[int, str]
+                i: int
+                name: str
                 categories.append({
                     "id": i + 1,
                     "name": name,
@@ -240,7 +242,9 @@ class convert:
                 })
 
             # Percorrer imagens e labels
-            for filename in os.listdir(self.labels_dir):
+            for filename in os.listdir(self.labels_dir): 
+                self.labels_dir: str
+                filename: str
                 if not filename.endswith(".txt"):
                     continue
 
@@ -249,6 +253,9 @@ class convert:
 
                 # Localiza imagem correspondente
                 for ext in [".jpg", ".png", ".jpeg"]:
+                    ext: str
+                    image_name: str
+                    self.images_dir: str
                     img_path = os.path.join(self.images_dir, image_name + ext)
                     if os.path.exists(img_path):
                         break
@@ -258,9 +265,13 @@ class convert:
 
                 # Tamanho da imagem
                 with Image.open(img_path) as img:
+                    img: ImageFile # type: ignore
+                    width: int
+                    height: int
                     width, height = img.size
 
                 # Adiciona imagem ao JSON
+                img_id: int
                 images.append({
                     "id": img_id,
                     "file_name": os.path.basename(img_path),
@@ -269,16 +280,25 @@ class convert:
                 })
 
                 # Lê labels YOLO
+                label_path: str
                 with open(label_path, "r") as f:
-                    lines = f.readlines()
+                    lines: str = f.readlines()
 
                 for line in lines:
-                    parts = line.strip().split()
+                    parts: list[str] = line.strip().split()
                     if len(parts) != 5:
                         continue  # linha inválida
-                    class_id, x, y, w, h = map(float, parts)
-                    coco_box = self.convert_bbox([x, y, w, h], width, height)
 
+                    class_id: float
+                    x: float
+                    y: float
+                    w: float
+                    h: float
+                    class_id, x, y, w, h = map(float, parts)
+                    coco_box: float = self.convert_bbox([x, y, w, h], width, height)
+                    
+                    ann_id: int
+                    img_id: int
                     annotations.append({
                         "id": ann_id,
                         "image_id": img_id,
@@ -292,16 +312,20 @@ class convert:
                 img_id += 1
 
             # Estrutura final COCO
-            coco_output = {
+            images: list
+            annotations: list
+            categories: list
+            coco_output: dict[str, list[Any]] = { # type: ignore
                 "images": images,
                 "annotations": annotations,
                 "categories": categories
             }
 
             # Salva JSON
+            self.output_json: str
             with open(self.output_json, "w") as f:
                 json.dump(coco_output, f, indent=4)
-
+            
             print(f"Conversão concluída! Arquivo COCO salvo em: {self.output_json}")
 
     """
@@ -325,8 +349,21 @@ yolo = conv.COCOtoYOLOConverter('coco.json', 'saida/')
 coco = conv.YOLOtoCOCOConverter('imagens/', 'labels/', ['car'], 'saida.json')
 
 """
-conv = convert()
-coco = conv.YOLOtoCOCOConverter(r"C:\CPLID_val\val\images", r"C:\CPLID_val\val\labels",
-                                 ['013'], 'saida.json')
 
+from pathlib import Path
+
+# Caminho base pode ser relativo ou absoluto
+base_dir = Path("CPLID_val") / "val"
+
+images_dir = base_dir / "images"
+labels_dir = base_dir / "labels"
+output_file = Path("saida.json")
+
+conv = convert()
+coco: YOLOtoCOCOConverter  = conv.YOLOtoCOCOConverter( # type: ignore
+    images_dir,
+    labels_dir,
+    ["013"],
+    output_file,
+)
 coco.convert()
