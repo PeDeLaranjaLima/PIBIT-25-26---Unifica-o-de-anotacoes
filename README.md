@@ -2,46 +2,33 @@
 
 Código feito por Gabriel Lima Dantas, combase em um código forncido pelo colega de laboratório Lucas Mascarenhas. Solução feita com base nas solicitações do líder de linha de pesquisa Gustavo Rodrigues.
 
-Conversor de:
+Estrutura de pastas:
+´´´
+/
+│
+├── voc_to_yolo.py
+├── coco_to_yolo.py
+├── yolo_to_coco.py
+└── convert.py
+´´´
 
-* VOC para YOLO:
-  - Modo de uso:
-  ```
-       yolo_labels = converter.convert_xml("/arquivo.xml") // caminho
-   
-       # Salvar em arquivo .txt, talvez seja melhor
-       with open("saida.txt", "w") as f:
-           f.write("\n".join(yolo_labels))
-  ```
-  
-* COCO para YOLO:
-  - Modo de uso:
-```
-       converter = COCOtoYOLOConverter(
-              json_path="caminho/para/instances_train.json",
-              output_dir="caminho/para/saida_yolo"
-          )
-          converter.convert()
-```
-* YOLO para COCO:
-  - Modo de uso:
-  ```
-      converter = YOLOtoCOCOConverter(
-           images_dir="caminho/para/imagens",
-           labels_dir="caminho/para/labels_yolo",
-           class_names=["insulator"]
-           output_json="saida_coco.json"
-       )
-       converter.convert()
-  ```
+Exemplo de uso:
+´´´
+    #Caminho base pode ser relativo ou absoluto
+    base_dir = Path("CPLID_val") / "val"
 
-# EXEMPLO DE USO GERAL:
-```
-conv = convert()
+    images_dir = base_dir / "images"
+    labels_dir = base_dir / "labels"
+    output_file = Path("saida.json")
 
-voc = conv.VOCtoYOLOConverter({'car': 0})
-yolo = conv.COCOtoYOLOConverter('coco.json', 'saida/')
-coco = conv.YOLOtoCOCOConverter('imagens/', 'labels/', ['car'], 'saida.json')
+    conv = convert()
+´´´
 
-coco.convert()
-```
+    coco = conv.YOLOtoCOCOConverter(
+        images_dir,
+        labels_dir,
+        ["013"],
+        output_file,
+    )
+
+    coco.convert()
