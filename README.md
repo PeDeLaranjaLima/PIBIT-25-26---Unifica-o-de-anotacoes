@@ -4,17 +4,17 @@ Código feito por Gabriel Lima Dantas, combase em um código forncido pelo coleg
 
 Estrutura de pastas:
 
-/
-│
-├── voc_to_yolo.py
-├── coco_to_yolo.py
-├── yolo_to_coco.py
-└── convert.py
+    /
+    │
+    ├── voc_to_yolo.py
+    ├── coco_to_yolo.py
+    ├── yolo_to_coco.py
+    └── convert.py
 
 
 Exemplo de uso:
     
-    Caminho base pode ser relativo ou absoluto
+    # Caminho base pode ser relativo ou absoluto
     base_dir = Path("CPLID_val") / "val"
 
     images_dir = base_dir / "images"
