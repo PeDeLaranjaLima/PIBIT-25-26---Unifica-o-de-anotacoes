@@ -23,7 +23,7 @@ Exemplo de uso:
 
     conv = convert()
 
-    coco = conv.YOLOtoCOCOConverter(
+    coco = conv.YOLOtoCOCO(
         images_dir,
         labels_dir,
         ["013"],
