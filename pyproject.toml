@@ -1,0 +1,66 @@
+[project]
+name = "annotation_converter"
+version = "0.1.0"
+description = "Tool to convert computer visionannotations between formats"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["pillow>=11.1.0"]
+
+[project.optional-dependencies]
+dev = ["ruff", "pyright", "pytest"]
+
+[project.scripts]
+annotation_converter = "annotation_converter.main:main"
+
+[tool.ruff]
+line-length = 79
+pycodestyle.max-doc-length = 72
+target-version = "py314"
+fix = true
+show-fixes = true
+indent-width = 4
+exclude = ["venv", ".venv", "env", ".env", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["T201", "TD003", "FIX002", "ERA001", "S311", "COM812", "T203"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.ruff.lint.isort]
+known-first-party = ["annotation_converter"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.11"
+include = ["src"]
+exclude = [
+    "**/venv",
+    "**/.venv",
+    "**/env",
+    "**/.env",
+    "**/node_modules",
+    "**/__pycache__",
+]
+venv = ".venv"
+venvPath = "."
+executionEnvironments = [{ root = "src" }]
+
+[tool.pytest.ini_options]
+addopts = "-s --color=yes --tb=short"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+

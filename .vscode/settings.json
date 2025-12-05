@@ -1,0 +1,49 @@
+{
+  "window.zoomLevel": 0,
+  "breadcrumbs.enabled": true,
+  "editor.fontSize": 16,
+  "debug.console.fontSize": 16,
+  "terminal.integrated.fontSize": 16,
+  "editor.glyphMargin": true,
+  "workbench.activityBar.location": "default",
+  "editor.lineNumbers": "on",
+  "files.eol": "\n", // Final de linha sempre será LF
+  "workbench.editor.labelFormat": "short",
+  "editor.tabSize": 2,
+  "editor.rulers": [72, 79, 120],
+  "explorer.compactFolders": true,
+  "editor.minimap.enabled": true,
+  "workbench.editor.enablePreview": false,
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.ignoreSelection": true,
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.runInTerminal": true,
+  "code-runner.preserveFocus": false,
+  "code-runner.executorMap": {
+    "python": "clear ; python -u"
+  },
+  // Python
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "python.defaultInterpreterPath": "./.venv/bin/python",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.activateEnvironment": true,
+  "python.languageServer": "None",
+  "python.venvPath": ".venv",
+
+  // 🛠 Formatação e Lint
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}

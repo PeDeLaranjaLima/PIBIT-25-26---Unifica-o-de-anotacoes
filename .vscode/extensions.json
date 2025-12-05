@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "tamasfe.even-better-toml",
+    "esbenp.prettier-vscode",
+    "charliermarsh.ruff",
+    "ms-python.vscode-pylance",
+    "vscode-icons-team.vscode-icons"
+  ]
+}
